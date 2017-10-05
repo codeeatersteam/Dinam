@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Dinam</string>
+    <string name="action_settings">Personnalisation</string>
+    <string name="about_app">A propos</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="slide_1_title">Gagnez du temps</string>
+    <string name="slide_1_description">Trouver rapidement un job, un stage ou toute offre professionnelle facilement</string>
+
+    <string name="slide_2_title">Restez connecte</string>
+    <string name="slide_2_description">Soyez au courant des evenements a venir en temps et en heure</string>
+
+    <string name="slide_3_title">Plus de mauvaises surprises</string>
+    <string name="slide_3_description">Renseignez vous sur les lieux de references et choisissez selon vos gouts</string>
+
+    <string name="slide_4_title">Trouvez votre bonheur</string>
+    <string name="slide_4_description">Personnalisez pour retrouver facilement les offres selon vos besoins</string>
+</resources>

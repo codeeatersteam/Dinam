@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/cardview_default_elevation"
+    android:layout_margin="@dimen/fab_margin">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_vertical_margin">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="Type Evenement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/typeevent"
+                android:textStyle="normal|bold"
+                android:textColor="@color/Blue_600"
+                android:textSize="14sp"
+                 android:layout_marginBottom="@dimen/appbar_padding_top"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:id="@+id/imageevent"
+                android:layout_marginBottom="@dimen/appbar_padding_top"/>
+
+
+            <TextView
+                android:text="Nom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nomevent"
+                android:textStyle="normal|bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:layout_marginBottom="@dimen/appbar_padding_top"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_place"
+                android:scaleType="centerCrop"
+                android:background="@color/Blue_600"/>
+            <TextView
+                android:text="Lieu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/lieuevent"
+                android:textColor="@color/colorAccent"
+                android:layout_marginBottom="@dimen/appbar_padding_top"
+                android:layout_marginLeft="@dimen/appbar_padding_top"
+                />
+</LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_event"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:scaleType="centerCrop"
+                android:background="@color/Blue_600"/>
+            <TextView
+                android:text="Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:id="@+id/dateevent"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_marginLeft="@dimen/appbar_padding_top"
+                />
+            <TextView
+                android:text="IDENTIFIANT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ideventtxt"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:textColor="@color/Grey_600"
+                android:visibility="invisible"
+                android:layout_marginRight="@dimen/fab_margin"/>
+</LinearLayout>
+
+
+        </LinearLayout>
+
+</FrameLayout>
+</android.support.v7.widget.CardView>

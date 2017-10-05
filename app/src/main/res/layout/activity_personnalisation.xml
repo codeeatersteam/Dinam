@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_personnalisation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/Grey_500"
+    tools:context="com.codeeatersteam.dinam.ui.Personnalisation">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Domaine d'offre prefere:"
+            android:textSize="@dimen/fab_margin"
+            android:background="@color/White"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_margin="@dimen/fab_margin"
+            android:id="@+id/domaineOffrePrefBtn"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Type d'offre:"
+            android:background="@color/White"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/fab_margin"
+            android:layout_margin="@dimen/fab_margin"
+            android:id="@+id/typeOffrePrefBtn"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TYPE D'EVENEMENT:"
+            android:background="@color/White"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/fab_margin"
+            android:layout_margin="@dimen/fab_margin"
+            android:id="@+id/typeEvenementPrefBtn"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TYPE DE LIEU:"
+            android:background="@color/White"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/fab_margin"
+            android:layout_margin="@dimen/fab_margin"
+            android:id="@+id/typeLieuPrefBtn"/>
+
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

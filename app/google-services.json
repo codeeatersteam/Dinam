@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "880631782691",
+    "firebase_url": "https://dinamtogo.firebaseio.com",
+    "project_id": "dinamtogo",
+    "storage_bucket": "dinamtogo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880631782691:android:eaf9829cdc8efbbd",
+        "android_client_info": {
+          "package_name": "com.codeeatersteam.dinam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880631782691-0d5ajrou3e8knnvc23mopjc93fo3abe2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codeeatersteam.dinam",
+            "certificate_hash": "d5d28dcf9a6f92890dc5d9ea0052b4754334fefd"
+          }
+        },
+        {
+          "client_id": "880631782691-o866djtjgsb556h6r3o97cnnt7vrsrf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMBCy5ckEpacchoYK8EIqJ4sIRIyQ3RVg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880631782691-o866djtjgsb556h6r3o97cnnt7vrsrf7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
