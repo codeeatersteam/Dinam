@@ -1,0 +1,209 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.codeeatersteam.dinam.ui.MemberSpace">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/fab_margin">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:src="@drawable/avatar"
+                    android:clickable="true"
+                    android:id="@+id/imageMembre"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:elevation="@dimen/fab_margin"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/fab_margin"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/Brown_900"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nom "
+                    android:layout_margin="@dimen/fab_margin"
+                    android:textStyle="bold"
+                    android:minWidth="150dp"
+                    android:textColor="@color/White"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TCHABAO"
+                android:id="@+id/nomMembre"
+                android:layout_margin="@dimen/fab_margin"
+                android:textColor="@color/White"/>
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prenoms "
+                    android:layout_margin="@dimen/fab_margin"
+                    android:textStyle="bold"
+                    android:minWidth="150dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pondikpa"
+                android:id="@+id/prenomsMembre"
+                android:layout_margin="@dimen/fab_margin"/>
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/Brown_900">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date de naissance "
+                    android:layout_margin="@dimen/fab_margin"
+                    android:textStyle="bold"
+                    android:minWidth="150dp"
+                    android:textColor="@color/White"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01-12-2017"
+                android:id="@+id/datenaissanceMembre"
+                android:layout_margin="@dimen/fab_margin"
+                android:textColor="@color/White"/>
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sexe "
+                    android:layout_margin="@dimen/fab_margin"
+                    android:textStyle="bold"
+                    android:minWidth="150dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Homme"
+                android:id="@+id/sexeMembre"
+                android:layout_margin="@dimen/fab_margin"/>
+                </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/Brown_900">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telephone "
+                android:layout_margin="@dimen/fab_margin"
+                android:textStyle="bold"
+                android:minWidth="150dp"
+                android:textColor="@color/White"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="97982807"
+                    android:id="@+id/telephoneMembre"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:textColor="@color/White"/>
+            </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email "
+                android:layout_margin="@dimen/fab_margin"
+                android:textStyle="bold"
+                android:minWidth="150dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ptchabao@gmail.com"
+                        android:id="@+id/emailMembre"
+                        android:layout_margin="@dimen/fab_margin"/>
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/Brown_900">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Diplome en vigueur"
+                android:layout_margin="@dimen/fab_margin"
+                android:textStyle="bold"
+                android:minWidth="150dp"
+                android:textColor="@color/White"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/diplomeMembre"
+                            android:text=" MASTER"
+                            android:layout_margin="@dimen/fab_margin"
+                            android:textColor="@color/White"/>
+                    </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:id="@+id/attacherCVBtn"
+                android:text="ATTACHER VOTRE CV"
+                android:visibility="invisible"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:id="@+id/uploadCVBtn"
+                android:text="ENVOYER VOTRE CV"
+                android:visibility="invisible"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</ScrollView>

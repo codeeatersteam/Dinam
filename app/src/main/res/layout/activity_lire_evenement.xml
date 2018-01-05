@@ -4,8 +4,6 @@
     android:id="@+id/activity_lire_evenement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="com.codeeatersteam.dinam.ui.LireEvenement"
     android:background="@color/Grey_500">
 
@@ -23,9 +21,11 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="350dp"
                     android:scaleType="centerCrop"
-                    android:id="@+id/imageEventLire"/>
+                    android:id="@+id/imageEventLire"
+                    android:clickable="true"
+                    android:adjustViewBounds="true"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -123,27 +123,7 @@
                     android:layout_marginTop="@dimen/fab_margin"/>
                 </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_web"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:layout_marginLeft="@dimen/fab_margin"
-                    android:scaleType="centerCrop"
-                    android:background="@color/Red_600"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/siteEventTxt"
-                    android:text="Aucun site web affilie"
-                    android:layout_marginLeft="@dimen/fab_margin"
-                    android:layout_marginTop="@dimen/fab_margin"
-                    android:layout_marginBottom="@dimen/fab_margin"/>
-                </LinearLayout>
+
 
 
 

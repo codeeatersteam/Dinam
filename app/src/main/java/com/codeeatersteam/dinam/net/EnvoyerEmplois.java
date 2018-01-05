@@ -29,6 +29,7 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_EMAIL;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_ID;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_POSTE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_SALAIRE;
+import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_SOURCE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_TELEPHONE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_TYPE_OFFRE;
 import static com.codeeatersteam.dinam.kernel.Core.LISTES_OFFRES_EN_LOCAL_NON_SYNCHRONISES;
@@ -65,7 +66,8 @@ public class EnvoyerEmplois extends AsyncTask<Void,Void,Void> {
                         cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_POSTE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_DATE_AUDIENCE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_DATE_CLOTURE)),
-                        cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_EMAIL)));
+                        cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_EMAIL)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_SOURCE)));
 
 
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, API_ENVOIE_OFFRES_URL, new Response.Listener<String>() {
@@ -103,6 +105,7 @@ public class EnvoyerEmplois extends AsyncTask<Void,Void,Void> {
                         params.put(COLUMN_OFFRE_DIPLOME_OFFRE, String.valueOf(offre.getDiplome()));
                         params.put(COLUMN_OFFRE_TYPE_OFFRE, String.valueOf(offre.getTypeoffre()));
                         params.put(COLUMN_OFFRE_TELEPHONE, offre.getTelephone());
+                        params.put(COLUMN_OFFRE_SOURCE, offre.getSource());
                         params.put("id_users", "1");
 
 

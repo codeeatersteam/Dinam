@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.codeeatersteam.dinam.ui.LireOffre"
-    android:background="@color/Grey_500">
+    android:background="@color/White">
 
 
     <ScrollView
@@ -18,15 +18,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
 
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="@dimen/cardview_default_elevation">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -158,7 +155,7 @@
                     android:orientation="horizontal">
 
 
-                    <TextView
+                    <com.luseen.autolinklibrary.AutoLinkTextView
                         android:text="Descripition"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -166,6 +163,7 @@
                         android:layout_marginLeft="@dimen/fab_margin"
                         android:layout_marginTop="@dimen/fab_margin"
                         android:textColor="@color/Grey_600"
+                        android:autoLink="all"
                         android:layout_marginRight="@dimen/fab_margin"/>
                 </LinearLayout>
 
@@ -183,12 +181,13 @@
                         android:scaleType="centerCrop"
                         android:background="@color/Red_600"/>
 
-                    <TextView
+                    <com.luseen.autolinklibrary.AutoLinkTextView
                         android:text="Contact"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/contactlectureoffretxt"
                         android:layout_marginLeft="@dimen/fab_margin"
+                        android:autoLink="all"
                         android:layout_marginTop="@dimen/fab_margin"
                         android:textColor="@color/Grey_600"
                         android:layout_marginRight="@dimen/fab_margin"/>
@@ -217,13 +216,36 @@
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:text="Source:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/Blue_900"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:textSize="14sp"
+                        android:textStyle="normal|bold"/>
+
+                    <TextView
+                        android:text="Source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sourceoffretxt"
+                        android:layout_margin="@dimen/fab_margin"
+                        android:textColor="@color/Grey_600"/>
+                </LinearLayout>
+
+
 
 
 
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
 
     </LinearLayout>
     </ScrollView>

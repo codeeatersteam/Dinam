@@ -63,7 +63,7 @@ public class EvenementsAdapter extends RecyclerView.Adapter<EvenementsAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageevenement;
+        ImageView imageevenement,share;
         TextView nom,lieu,date,type,id;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -73,6 +73,23 @@ public class EvenementsAdapter extends RecyclerView.Adapter<EvenementsAdapter.Vi
             date=(TextView)itemView.findViewById(R.id.dateevent);
             type=(TextView)itemView.findViewById(R.id.typeevent);
             id = (TextView)itemView.findViewById(R.id.ideventtxt);
+
+            share=(ImageView)itemView.findViewById(R.id.shareEventvign);
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "EVENEMENT VIA DINAM.");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, type.getText()+" \n"+
+                            nom.getText()+" \n"+
+                            "Plus d'information sur Dinam \n" +
+                            "https://play.google.com/store/apps/details?id=com.codeeatersteam.dinam");
+                    sendIntent.setType("text/plain");
+                    v.getContext().startActivity(Intent.createChooser(sendIntent, "PARTAGE VIA DINAM"));
+
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

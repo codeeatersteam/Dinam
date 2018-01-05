@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.codeeatersteam.dinam.ui.ConteneurCv">
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerCvDomaine"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="@dimen/fab_margin"/>
+
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/pullRefreshCv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_cv"/>
+
+
+    </com.baoyz.widget.PullRefreshLayout>
+
+</LinearLayout>

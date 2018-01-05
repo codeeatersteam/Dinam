@@ -1,5 +1,7 @@
 package com.codeeatersteam.dinam.kernel;
 
+import java.util.ArrayList;
+
 /**
  * Created by pondikpa on 15/06/17.
  * @author pondikpa Tchabao
@@ -11,15 +13,24 @@ public class Core {
 
     // les informations sur l'application
     public static String APP_NAME = "Dinam";
-    public static String APP_VERSION = "1.0.1";
+    public static String APP_VERSION = "1.0.3 Doris";
     public static String TEAM_NAME = "Code Eaters Team";
 
     // les informations sur la base de donnees locale
     public static String DATABASE_NAME = "dinamdatas";
-    public static int DATATBASE_VERSION = 1;
+    public static int DATATBASE_VERSION = 2;
 
     // les informations sur les preferences
     public static String PREFERENCES_NAME = "dinampreferences";
+    public static String ID_PREFERENCE = "id";
+    public static String NOM_PREFERENCE = "nom";
+    public static String PRENOMS_PREFERENCE = "prenoms";
+    public static String DATENAISSANCE_PREFERENCE = "datenaissance";
+    public static String EMAIL_PREFERENCE = "email";
+    public static String TELEPHONE_PREFERENCE = "telephone";
+    public static String MONDIPLOME_PREFERENCE = "mondiplome";
+    public static String MONIMAGE_PREFERENCE = "monimage";
+    public static String SEXE_PREFERENCE = "sexe";
     public static String DOMAINE_OFFRE_PREFERE = "domaineOffrePref";
     public static String TYPE_OFFRE_PREFERE = "typeOffrePref";
     public static String TYPE_EVENEMENT_PREFERE = "typeEvenementPref";
@@ -28,6 +39,8 @@ public class Core {
     public static String OUI_COMMUN_AUX_PREFERENCES = "oui";
     public static String NON_COMMUN_AUX_PREFERENCES = "non";
     public static String WELCOME_STATE= "welcome";
+
+    public static ArrayList<String> CHOIX_PREFERENCES_OFFRES = new ArrayList<String>();
 
     //le informations de publicites
     public static  final String AD_OFFRES_UNIT_ID ="ca-app-pub-6105029167686346/9575546589";
@@ -62,6 +75,7 @@ public class Core {
     public static String COLUMN_OFFRE_ID = COLUMN_TABLE_ID;
     public static String COLUMN_OFFRE_POSTE = "poste";
     public static String COLUMN_OFFRE_SALAIRE = "salaire";
+    public static String COLUMN_OFFRE_SOURCE = "source";
     public static String COLUMN_OFFRE_DATE_AUDIENCE = "date_audience";
     public static String COLUMN_OFFRE_DATE_CLOTURE = "date_fin" ;
     public static String COLUMN_OFFRE_DESCRIPTION = COLUMN_TABLE_DESCRIPTION;
@@ -84,7 +98,6 @@ public class Core {
     public static String COLUMN_EVENEMENT_DESCRIPTION = COLUMN_TABLE_DESCRIPTION;
     public static String COLUMN_EVENEMENT_LIEU = "lieu";
     public static String COLUMN_EVENEMENT_TELEPHONE = COLUMN_TABLE_TELEPHONE;
-    public static String COLUMN_EVENEMENT_SITE_WEB = COLUMN_TABLE_SITE_WEB;
     public static String COLUMN_EVENEMENT_ETAT = COLUMN_TABLE_ETAT;
     public static String COLUMN_EVENEMENT_TYPE_EVENEMENT = "id_typeevenements";
     public static String COLUMN_EVENEMENT_SYNC_STATUS = COLUMN_TABLE_SYNC_STATUS;
@@ -155,7 +168,8 @@ public class Core {
 
     public static String LISTES_OFFRES_EN_LOCAL_APPROUVES = " SELECT * FROM "+TABLE_OFFRES+" WHERE "+COLUMN_OFFRE_ETAT+" = "+COLUMN_TABLE_SYNCHRONIZED+" ORDER BY "+COLUMN_OFFRE_ID+" DESC";
     public static String LISTES_OFFRES_EN_LOCAL_NON_SYNCHRONISES = " SELECT * FROM "+TABLE_OFFRES+" WHERE "+COLUMN_OFFRE_SYNC_STATUS+" = "+COLUMN_TABLE_UNSYNCHRONIZED+" AND "+COLUMN_OFFRE_ETAT+" ="+COLUMN_TABLE_UNSYNCHRONIZED;
-
+    public static String LISTES_EVENEMENTS_EN_LOCAL_NON_SYNCHRONISES = " SELECT * FROM "+TABLE_EVENEMENTS+" WHERE "+COLUMN_EVENEMENT_SYNC_STATUS+" = "+COLUMN_TABLE_UNSYNCHRONIZED+" AND "+COLUMN_EVENEMENT_ETAT+" ="+COLUMN_TABLE_UNSYNCHRONIZED;
+    public static String LISTES_LIEUX_EN_LOCAL_NON_SYNCHRONISES = " SELECT * FROM "+TABLE_LIEUX+" WHERE "+COLUMN_LIEU_SYNC_STATUS+" = "+COLUMN_TABLE_UNSYNCHRONIZED+" AND "+COLUMN_LIEU_ETAT+" ="+COLUMN_TABLE_UNSYNCHRONIZED;
     public static String LISTES_EVENEMENTS_EN_LOCAL_APPROUVES = " SELECT * FROM "+TABLE_EVENEMENTS+" WHERE "+COLUMN_EVENEMENT_ETAT+"= "+COLUMN_TABLE_SYNCHRONIZED+" ORDER BY "+COLUMN_EVENEMENT_ID+" DESC";
     public static String LISTES_LIEUX_EN_LOCAL_APPROUVES = " SELECT * FROM "+TABLE_LIEUX+" ORDER BY "+COLUMN_LIEU_ID+" DESC";
     public static String LISTES_DOMAINES_EN_LOCAL_APPROUVES = " SELECT * FROM "+TABLE_DOMAINES+" ORDER BY "+COLUMN_LIEU_NOM+" ASC";

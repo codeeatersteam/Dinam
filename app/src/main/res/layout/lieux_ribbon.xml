@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="10dp"
+    android:layout_margin="10dp">
+
+    <com.battleent.ribbonviews.RibbonLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:show_header="true"
+        android:id="@+id/lieuribbonlayout"
+    app:header_text="New"
+    app:header_textSize="14"
+    app:header_textColor="@android:color/white"
+    app:header_ribbonRadius="6"
+    app:header_ribbonColor="@color/Blue_500"
+    app:header_padding="5"
+    app:show_bottom="true"
+    app:bottom_text="Updated today"
+    app:bottom_textSize="18"
+    app:bottom_textColor="@android:color/white"
+    app:bottom_ribbonColor="@color/Red_700"
+    app:bottom_height="100"
+    app:bottom_padding="11">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo"
+        android:id="@+id/lieuribbonimage"/>
+        <TextView
+            android:text="id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/idLieutxt"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:textColor="@color/Grey_600"
+            android:visibility="invisible"
+            android:layout_marginRight="@dimen/fab_margin"/>
+</com.battleent.ribbonviews.RibbonLayout>
+
+</android.support.v7.widget.CardView>

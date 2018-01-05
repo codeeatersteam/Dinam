@@ -8,7 +8,7 @@ public class EvenementsDao {
     int id,etat,typeevenement;
     String nom,telephone,image,date_evenement,description,lieu,siteweb,created_at,updated_at;
 
-    public EvenementsDao(int id, int etat, int typeevenement, String nom,String telephone, String image, String date_evenement, String description, String lieu, String siteweb, String created_at, String updated_at) {
+    public EvenementsDao(int id, int etat, int typeevenement, String nom,String telephone, String image, String date_evenement, String description, String lieu, String created_at, String updated_at) {
         this.id = id;
         this.etat = etat;
         this.typeevenement = typeevenement;
@@ -18,7 +18,6 @@ public class EvenementsDao {
         this.date_evenement = date_evenement;
         this.description = description;
         this.lieu = lieu;
-        this.siteweb = siteweb;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
@@ -93,14 +92,6 @@ public class EvenementsDao {
 
     public void setLieu(String lieu) {
         this.lieu = lieu;
-    }
-
-    public String getSiteweb() {
-        return siteweb;
-    }
-
-    public void setSiteweb(String siteweb) {
-        this.siteweb = siteweb;
     }
 
     public String getCreated_at() {

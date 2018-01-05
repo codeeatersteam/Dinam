@@ -1,20 +1,45 @@
 package com.codeeatersteam.dinam.kernel;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.codeeatersteam.dinam.R;
+import com.codeeatersteam.dinam.ui.ConteneurPrincipal;
+import com.luseen.autolinklibrary.AutoLinkMode;
+import com.luseen.autolinklibrary.AutoLinkOnClickListener;
+import com.luseen.autolinklibrary.AutoLinkTextView;
+
+import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import es.dmoral.toasty.Toasty;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.codeeatersteam.dinam.kernel.Core.NON_COMMUN_AUX_PREFERENCES;
 import static com.codeeatersteam.dinam.kernel.Core.TOUS_COMMUN_AUX_PREFERENCES;
 
@@ -41,6 +66,32 @@ public class FonctionsUtiles {
 
     }
 
+    //fonction de convertion d'images en String
+    public static String ImageTostring(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] imgBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgBytes,Base64.DEFAULT);
+
+    }
+
+//  lire le numero de la carte sim 
+//    public static void numeroDeTelephone(Context ctx){
+//        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                ctx.getApplicationInfo().requestPermissions(new String[]{
+//                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_PHONE_STATE
+//                }, 10);
+//            }
+//
+//        }else {
+//            TelephonyManager telemamanger = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+//            String getSimSerialNumber = telemamanger.getSimSerialNumber();
+//            String getSimNumber = telemamanger.getLine1Number();
+//            Toasty.warning(ctx, getSimSerialNumber, Toast.LENGTH_LONG, true).show();
+//        }
+//    }
+
     //fonction de verification de la connexion internet
     public static boolean isConnectedInternet(Context ctx)
     {
@@ -53,10 +104,47 @@ public class FonctionsUtiles {
             {
                 return true;
             }
-            else return false;
+            else{
+                Toasty.warning(ctx, "Veuillez verifier connexion internet.", Toast.LENGTH_LONG, true).show();
+                return false;}
+
         }
-        else return false;
+        else {
+            Toasty.error(ctx, "Veuillez vous connecter à internet.", Toast.LENGTH_LONG, true).show();
+            return false;}
     }
+
+    public static AutoLinkTextView autoLinksMode(final Context ctx, final AutoLinkTextView textView){
+        textView.addAutoLinkMode(
+                AutoLinkMode.MODE_HASHTAG,
+                AutoLinkMode.MODE_PHONE,
+                AutoLinkMode.MODE_URL,
+                AutoLinkMode.MODE_MENTION);
+        textView.setHashtagModeColor(ContextCompat.getColor(ctx, R.color.Green_500));
+        textView.setPhoneModeColor(ContextCompat.getColor(ctx, R.color.Green_500));
+        textView.setCustomModeColor(ContextCompat.getColor(ctx, R.color.Green_500));
+        textView.setUrlModeColor(ContextCompat.getColor(ctx, R.color.Blue_500));
+        textView.setMentionModeColor(ContextCompat.getColor(ctx, R.color.Green_500));
+        textView.setEmailModeColor(ContextCompat.getColor(ctx, R.color.Green_500));
+        textView.setAutoLinkOnClickListener(new AutoLinkOnClickListener() {
+            @Override
+            public void onAutoLinkTextClick(AutoLinkMode autoLinkMode, String matchedText) {
+                if (autoLinkMode.equals(AutoLinkMode.MODE_PHONE)){
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", matchedText, null));
+
+
+
+                    ctx.startActivity(callIntent);
+                }else if (autoLinkMode.equals(AutoLinkMode.MODE_URL)){
+                    Toast.makeText(ctx," "+autoLinkMode,Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        return textView;
+    }
+
+
 
 
     public static boolean  verifierEmail(EditText champ){
@@ -76,7 +164,7 @@ public class FonctionsUtiles {
     }
 
     public static String dateActuelle(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         return dateFormat.format(date);
 
@@ -84,24 +172,37 @@ public class FonctionsUtiles {
 
 
     public static void initialiserPreferences(Context ctx){
-        if (PreferencesUtilisateur.getInstance(ctx).getDomaineOffrePref() ==null){
-            PreferencesUtilisateur.getInstance(ctx).setDomaineOffrePref(TOUS_COMMUN_AUX_PREFERENCES);
+        ArrayList<String> init = new ArrayList<>();
 
-        }
-        if (PreferencesUtilisateur.getInstance(ctx).getTypeOffrePref() ==null){
-            PreferencesUtilisateur.getInstance(ctx).setTypeOffrePref(TOUS_COMMUN_AUX_PREFERENCES);
-        }
-        if (PreferencesUtilisateur.getInstance(ctx).getWelcome() ==null){
-            PreferencesUtilisateur.getInstance(ctx).setWelcome(TOUS_COMMUN_AUX_PREFERENCES);
-        }
+            PreferencesUtilisateur.getInstance(ctx).setPreferencesDomaines(init);
+            PreferencesUtilisateur.getInstance(ctx).setPreferencesTypeOffres(init);
+        PreferencesUtilisateur.getInstance(ctx).setPreferencesTypeEvenements(init);
+        PreferencesUtilisateur.getInstance(ctx).setPreferencesTypeLieux(init);
 
-        if (PreferencesUtilisateur.getInstance(ctx).getTypeEvenementPref() ==null){
-            PreferencesUtilisateur.getInstance(ctx).setTypeEvenementPref(TOUS_COMMUN_AUX_PREFERENCES);
-        }
 
-        if (PreferencesUtilisateur.getInstance(ctx).getTypeLieuxPref() ==null){
-            PreferencesUtilisateur.getInstance(ctx).setTypeLieuxPref(TOUS_COMMUN_AUX_PREFERENCES);
-        }
+
+
+
+
+    }
+
+    public static  void createNotification(Context ctx,int NOTIFICATION_ID,int REQUEST_CODE,String message){
+        final NotificationManager mNotification = (NotificationManager) ctx.getSystemService(NOTIFICATION_SERVICE);
+
+        final Intent launchNotifiactionIntent = new Intent(ctx,ConteneurPrincipal.class);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(ctx,
+                REQUEST_CODE, launchNotifiactionIntent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Notification.Builder builder = new Notification.Builder(ctx)
+                .setWhen(System.currentTimeMillis())
+                .setTicker("Dinam")
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle("Dinam")
+                .setContentText(message)
+                .setContentIntent(pendingIntent);
+
+        mNotification.notify(NOTIFICATION_ID, builder.build());
     }
 
 //    public static boolean preferencesNonParametres(Context ctx){
@@ -119,6 +220,15 @@ public class FonctionsUtiles {
 //
 //
 //    }
+
+
+    public static  boolean userConnected(Context ctx){
+        if (PreferencesUtilisateur.getInstance(ctx).getEmail()!=null){
+            return true;
+        }
+        else return false;
+
+    }
 
     public  static void affecterPolice(Context ctx,TextView txt){
         //affecte la police du titre au composant passe en parametre

@@ -7,8 +7,13 @@ package com.codeeatersteam.dinam.net;
  * @description contient les routes vers  l'api
  */
 public class ApiLinks {
-    protected static String API_ROOT_URL = "http://apidinam.minokam.com/";
+    protected static String API_ROOT_URL = "https://apidinam.000webhostapp.com/";
+    public static String API_LOGIN_URL = API_ROOT_URL+"loginmobileapp";
+    public static String API_REGISTER_URL = API_ROOT_URL+"newuser";
     protected static String  API_ENVOIE_OFFRES_URL = API_ROOT_URL+"newoffre";
+    public static String  API_ENVOIE_CV_URL = API_ROOT_URL+"uploadcv";
+    protected static String  API_ENVOIE_EVENEMENTS_URL = API_ROOT_URL+"newevenement";
+    protected static String  API_ENVOIE_LIEUX_URL = API_ROOT_URL+"newlieu";
     protected static String API_RECUPERER_OFFRES_URL = API_ROOT_URL+"listedesoffresapprouves";
     protected static String API_RECUPERER_EVENEMENTS_URL = API_ROOT_URL+"listedesevenementsapprouves";
     protected static String API_RECUPERER_LIEUX_URL = API_ROOT_URL+"listedeslieuxapprouves";
@@ -19,5 +24,7 @@ public class ApiLinks {
     protected static String API_RECUPERER_TYPESLIEUX_URL = API_ROOT_URL+"listedestypelieuxapprouves";
     public static String API_IMAGES_EVENEMENTS_URL = API_ROOT_URL+"images/evenements/";
     public static String API_IMAGES_LIEUX_URL = API_ROOT_URL+"images/lieux/";
+    public static String API_IMAGES_USERS_URL = API_ROOT_URL+"images/users/";
+    public static String API_DOSSIER_CV_URL = API_ROOT_URL+"cv/";
 
 }

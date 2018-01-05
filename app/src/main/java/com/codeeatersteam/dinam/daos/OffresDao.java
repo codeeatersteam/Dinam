@@ -6,9 +6,9 @@ package com.codeeatersteam.dinam.daos;
 
 public class OffresDao {
     int id,domaine,typeoffre,diplome;
-    String salaire,description,telephone,poste,date_audience,date_fin,email;
+    String salaire,description,telephone,poste,date_audience,date_fin,email,source;
 
-    public OffresDao(int id, int domaine, int typeoffre, int diplome, String salaire, String description, String telephone, String poste, String date_audience, String date_fin, String email) {
+    public OffresDao(int id, int domaine, int typeoffre, int diplome, String salaire, String description, String telephone, String poste, String date_audience, String date_fin, String email,String source) {
         this.id = id;
         this.domaine = domaine;
         this.typeoffre = typeoffre;
@@ -20,6 +20,7 @@ public class OffresDao {
         this.date_audience = date_audience;
         this.date_fin = date_fin;
         this.email = email;
+        this.source= source;
     }
 
     public int getId() {
@@ -108,5 +109,13 @@ public class OffresDao {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

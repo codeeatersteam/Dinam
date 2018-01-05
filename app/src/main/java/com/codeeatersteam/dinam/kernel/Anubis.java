@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.codeeatersteam.dinam.net.EnvoyerEmplois;
+import com.codeeatersteam.dinam.net.EnvoyerEvenements;
+import com.codeeatersteam.dinam.net.EnvoyerLieux;
 import com.codeeatersteam.dinam.net.RecupererDiplomes;
 import com.codeeatersteam.dinam.net.RecupererDomaines;
 import com.codeeatersteam.dinam.net.RecupererEvenements;
@@ -41,6 +43,10 @@ public class Anubis extends BroadcastReceiver {
                 recupererLieux.execute();
                 EnvoyerEmplois envoyerEmplois = new EnvoyerEmplois(context);
                 envoyerEmplois.execute();
+                EnvoyerEvenements envoyerEvenements = new EnvoyerEvenements(context);
+                envoyerEvenements.execute();
+                EnvoyerLieux envoyerLieux = new EnvoyerLieux(context);
+                envoyerLieux.execute();
             }catch (Exception e){
 
             }

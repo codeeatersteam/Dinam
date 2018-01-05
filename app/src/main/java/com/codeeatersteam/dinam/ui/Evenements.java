@@ -1,11 +1,9 @@
 package com.codeeatersteam.dinam.ui;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,11 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.codeeatersteam.dinam.R;
 import com.codeeatersteam.dinam.adapters.EvenementsAdapter;
 import com.codeeatersteam.dinam.daos.EvenementsDao;
-import com.codeeatersteam.dinam.kernel.Core;
 import com.codeeatersteam.dinam.kernel.DbBuilder;
+import com.codeeatersteam.dinam.kernel.FonctionsUtiles;
 import com.codeeatersteam.dinam.net.RecupererEvenements;
 import com.codeeatersteam.dinam.net.RecupererTypesEvenement;
 
@@ -32,13 +31,10 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_ID;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_IMAGE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_LIEU;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_NOM;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_SITE_WEB;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_TELEPHONE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_TYPE_EVENEMENT;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_TYPE_OFFRE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_TYPE_EVENEMENT_UPDATED_AT;
 import static com.codeeatersteam.dinam.kernel.Core.LISTES_EVENEMENTS_EN_LOCAL_APPROUVES;
-import static com.codeeatersteam.dinam.ui.Conteneur.fab;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +57,7 @@ public class Evenements extends Fragment {
     EvenementsAdapter adapter;
     ArrayList<EvenementsDao> evenementsDaos;
     SwipeRefreshLayout layoutswipe;
+    PullRefreshLayout refreshLayout;
 
 
 
@@ -116,10 +113,9 @@ public class Evenements extends Fragment {
             description = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_DESCRIPTION));
             dateevenement = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_DATE));
             lieu = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_LIEU));
-            siteweb = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_SITE_WEB));
             created_at  = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_CREATED_AT));
             updated_at  = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE_EVENEMENT_UPDATED_AT));
-            evenementsDaos.add(new EvenementsDao(id,etat,type,nom,telephone,image,dateevenement,description,lieu,siteweb,created_at,updated_at));
+            evenementsDaos.add(new EvenementsDao(id,etat,type,nom,telephone,image,dateevenement,description,lieu,created_at,updated_at));
 
 
         }
@@ -140,38 +136,37 @@ public class Evenements extends Fragment {
         evenementsDaos = new ArrayList<>();
         adapter = new EvenementsAdapter(evenementsDaos,rootView.getContext());
         recyclerView.setAdapter(adapter);
-        layoutswipe = (SwipeRefreshLayout) rootView.findViewById(R.id.evenementSwipeLayout);
         evenenementsEnLocal();
-        DbBuilder builder = new DbBuilder(rootView.getContext());
-        layoutswipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        refreshLayout = (PullRefreshLayout)rootView.findViewById(R.id.pullRefreshEvents);
+
+
+        refreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+
             @Override
             public void onRefresh() {
-                try{
-                    layoutswipe.setRefreshing(true);
-                    RecupererTypesEvenement recupererTypesEvenement = new RecupererTypesEvenement(rootView.getContext());
-                    recupererTypesEvenement.execute();
+                if (FonctionsUtiles.isConnectedInternet(rootView.getContext())){
+
+                    RecupererTypesEvenement recupererType = new RecupererTypesEvenement(rootView.getContext());
+                    recupererType.execute();
                     RecupererEvenements recupererEvenements = new RecupererEvenements(rootView.getContext());
                     recupererEvenements.execute();
+
                     evenenementsEnLocal();
-
-
-
-                }catch (Exception e){
-
                 }
 
-                (new Handler()).postDelayed(new Runnable() {
+                refreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        layoutswipe.setRefreshing(false);
+                        refreshLayout.setRefreshing(false);
+
                     }
-                },10000);
-
-
+                },5000);
 
             }
-        });
 
+        });
 
         return rootView;
     }

@@ -25,30 +25,34 @@ public class ParametresDomaines extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         DbBuilder databaseBuilder = new DbBuilder(getActivity());
-       ArrayList<String> domlist = databaseBuilder.listeDesDomaines();
-        domlist.add(0,TOUS_COMMUN_AUX_PREFERENCES);
+       final ArrayList<String> domlist = databaseBuilder.listeDesDomaines();
 
         CharSequence[] domaines = new CharSequence[domlist.size()];
         domaines = domlist.toArray(domaines);
         final CharSequence[] listedomaines = domaines;
+        final ArrayList<String> selectionnes = new ArrayList<String>();
 
-        builder.setTitle("Choisissez votre domaine de preference").setSingleChoiceItems(listedomaines, 0, new DialogInterface.OnClickListener() {
+        builder.setTitle("Selection").setMultiChoiceItems(listedomaines, null, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                domainchoisi = (String) listedomaines[which];
-
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked){
+                    selectionnes.add(String.valueOf(listedomaines[which]));
+                }else if (selectionnes.contains(listedomaines[which])){
+                    selectionnes.remove(listedomaines[which]);
+                }
 
             }
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (domainchoisi==null){
 
-                }else {
-                    PreferencesUtilisateur.getInstance(getActivity()).setDomaineOffrePref(domainchoisi);
-                    FonctionsUtiles.ouvrirActivite(getActivity(), Personnalisation.class);
-
+                if (selectionnes.size()>0){
+                    PreferencesUtilisateur.getInstance(getActivity()).setPreferencesDomaines(selectionnes);
                 }
+                else {
+                    PreferencesUtilisateur.getInstance(getActivity()).getPreferencesTypeOffres().clear();
+                }
+
 
             }
         }).setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -57,6 +61,7 @@ public class ParametresDomaines extends DialogFragment {
 
             }
         });
+
         return builder.create();
 
     }

@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.codeeatersteam.dinam.R;
-import com.codeeatersteam.dinam.adapters.LieuxPourMoiAdapter;
+import com.codeeatersteam.dinam.adapters.LieuxAdapter;
 import com.codeeatersteam.dinam.daos.LieuxDao;
 import com.codeeatersteam.dinam.kernel.DbBuilder;
+import com.codeeatersteam.dinam.kernel.FonctionsUtiles;
 import com.codeeatersteam.dinam.net.RecupererLieux;
+import com.codeeatersteam.dinam.net.RecupererTypesLieu;
 
 import java.util.ArrayList;
 
@@ -49,9 +51,10 @@ public class Lieux extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private RecyclerView recyclerView;
-    LieuxPourMoiAdapter adapter;
+    LieuxAdapter adapter;
     ArrayList<LieuxDao> lieuxDaos;
-    SwipeRefreshLayout layoutswipe;
+
+    PullRefreshLayout refreshLayout;
 
 
     // TODO: Rename and change types of parameters
@@ -130,39 +133,40 @@ public class Lieux extends Fragment {
         // Inflate the layout for this fragment
         final View rootView= inflater .inflate(R.layout.lieux, container, false);
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_lieux);
-        layoutswipe = (SwipeRefreshLayout)rootView.findViewById(R.id.lieuSwipeLayout);
+        refreshLayout = (PullRefreshLayout)rootView.findViewById(R.id.pullRefreshLieux);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         lieuxDaos = new ArrayList<>();
-        adapter = new LieuxPourMoiAdapter(lieuxDaos,rootView.getContext());
+        adapter = new LieuxAdapter(rootView.getContext(),lieuxDaos);
         recyclerView.setAdapter(adapter);
         lieuxEnLocal();
-        DbBuilder builder = new DbBuilder(rootView.getContext());
-        layoutswipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+        refreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        refreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+
             @Override
             public void onRefresh() {
-                try{
-                    layoutswipe.setRefreshing(true);
+                if (FonctionsUtiles.isConnectedInternet(rootView.getContext())){
+                    RecupererTypesLieu recupererTypesLieu = new RecupererTypesLieu(rootView.getContext());
+                    recupererTypesLieu.execute();
+
                     RecupererLieux recupererLieux = new RecupererLieux(rootView.getContext());
                     recupererLieux.execute();
+
                     lieuxEnLocal();
-
-
-
-                }catch (Exception e){
-
                 }
 
-                (new Handler()).postDelayed(new Runnable() {
+                refreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        layoutswipe.setRefreshing(false);
+                        refreshLayout.setRefreshing(false);
+
                     }
                 },5000);
 
-
-
             }
+
         });
 
 

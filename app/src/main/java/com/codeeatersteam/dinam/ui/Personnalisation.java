@@ -32,10 +32,10 @@ public class Personnalisation extends AppCompatActivity {
         typeEvenementPref = (Button)findViewById(R.id.typeEvenementPrefBtn);
         typeLieuPref = (Button)findViewById(R.id.typeLieuPrefBtn);
 
-        domainePref.setText("Domaine d'offre: "+ PreferencesUtilisateur.getInstance(this).getDomaineOffrePref());
-        typeOffrePref.setText("Type d'offre: " + PreferencesUtilisateur.getInstance(this).getTypeOffrePref());
-        typeEvenementPref.setText("Type d'evenement: " + PreferencesUtilisateur.getInstance(this).getTypeEvenementPref());
-        typeLieuPref.setText("Type de lieu: " + PreferencesUtilisateur.getInstance(this).getTypeLieuxPref());
+//        domainePref.setText("Domaine d'offre: "+ PreferencesUtilisateur.getInstance(this).getDomaineOffrePref());
+//        typeOffrePref.setText("Type d'offre: " + PreferencesUtilisateur.getInstance(this).getTypeOffrePref());
+//        typeEvenementPref.setText("Type d'evenement: " + PreferencesUtilisateur.getInstance(this).getTypeEvenementPref());
+//        typeLieuPref.setText("Type de lieu: " + PreferencesUtilisateur.getInstance(this).getTypeLieuxPref());
 
         domainePref.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,15 +77,11 @@ public class Personnalisation extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        System.out.println("on pause");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        domainePref.setText("Domaine d'offre: "+ PreferencesUtilisateur.getInstance(Personnalisation.this).getDomaineOffrePref());
-        typeOffrePref.setText("Type d'offre: " + PreferencesUtilisateur.getInstance(Personnalisation.this).getTypeOffrePref());
-        System.out.println("on resume");
 
     }
 
@@ -95,9 +91,9 @@ public class Personnalisation extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
-        FonctionsUtiles.ouvrirActivite(this,Conteneur.class );
-        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        FonctionsUtiles.ouvrirActivite(this,Conteneur.class );
+//        super.onBackPressed();
+//    }
 }

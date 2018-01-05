@@ -28,14 +28,17 @@ import static com.codeeatersteam.dinam.kernel.FonctionsUtiles.isConnectedInterne
 import static com.codeeatersteam.dinam.kernel.FonctionsUtiles.ouvrirActivite;
 
 public class Welcome extends AppCompatActivity {
-   private static int SPLASH_TIME_OUT = 4000;
+   private static int SPLASH_TIME_OUT = 6000;
     TextView logotext;
+   // PulseView pulseView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         logotext = (TextView)findViewById(R.id.welcome_app_name);
+      //  pulseView= (PulseView) findViewById(R.id.pulseViewWelcome);
+        //pulseView.startPulse();
         logotext.setTextSize(70);
         affecterPolice(this,logotext);
         initialiserPreferences(this);
@@ -81,7 +84,7 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void run() {
                 PreferencesUtilisateur.getInstance(Welcome.this).setWelcome(OUI_COMMUN_AUX_PREFERENCES);
-                ouvrirActivite(Welcome.this,Conteneur.class);
+                ouvrirActivite(Welcome.this,ConteneurPrincipal.class);
                 finish();
             }
         },SPLASH_TIME_OUT);

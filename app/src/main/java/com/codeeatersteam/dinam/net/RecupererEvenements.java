@@ -12,12 +12,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.codeeatersteam.dinam.daos.EvenementsDao;
 import com.codeeatersteam.dinam.kernel.DbBuilder;
+import com.codeeatersteam.dinam.kernel.FonctionsUtiles;
+import com.codeeatersteam.dinam.kernel.PreferencesUtilisateur;
 import com.codeeatersteam.dinam.kernel.RequestHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_CREATED_AT;
@@ -28,7 +31,6 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_ID;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_IMAGE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_LIEU;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_NOM;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_SITE_WEB;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_TELEPHONE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_TYPE_EVENEMENT;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_UPDATED_AT;
@@ -39,6 +41,8 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_UPDATED_AT;
 
 public class RecupererEvenements extends AsyncTask<Void,Void,Void>{
     Context ctx;
+    private static final int REQUEST_CODE = 5255555;
+    private static final int NOTIFICATION_ID = 555;
 
     public RecupererEvenements(Context ctx) {
         this.ctx = ctx;
@@ -48,6 +52,8 @@ public class RecupererEvenements extends AsyncTask<Void,Void,Void>{
     protected void onPreExecute() {
         super.onPreExecute();
     }
+
+
 
     @Override
     protected Void doInBackground(Void... params) {
@@ -62,6 +68,7 @@ public class RecupererEvenements extends AsyncTask<Void,Void,Void>{
                     DbBuilder builder = new DbBuilder(ctx);
                     SQLiteDatabase database = builder.getWritableDatabase();
                     EvenementsDao evenement ;
+                    ArrayList<String> evenementsSelectionnes = PreferencesUtilisateur.getInstance(ctx).getPreferencesTypeEvenements();
                     for (int i=0;i<=array.length();i++){
                         JSONObject objetfinal = array.getJSONObject(i);
                         evenement=new EvenementsDao(objetfinal.getInt(COLUMN_EVENEMENT_ID),
@@ -73,23 +80,35 @@ public class RecupererEvenements extends AsyncTask<Void,Void,Void>{
                                 objetfinal.getString(COLUMN_EVENEMENT_DATE),
                                 objetfinal.getString(COLUMN_EVENEMENT_DESCRIPTION),
                                 objetfinal.getString(COLUMN_EVENEMENT_LIEU),
-                                objetfinal.getString(COLUMN_EVENEMENT_SITE_WEB),
                                 objetfinal.getString(COLUMN_EVENEMENT_CREATED_AT),
                                 objetfinal.getString(COLUMN_EVENEMENT_UPDATED_AT));
+                        try {
 
-                        builder.enregistrerEvenementDepuisApi(evenement.getId(),
-                                evenement.getEtat(),
-                                evenement.getTypeevenement(),
-                                evenement.getNom(),
-                                evenement.getTelephone(),
-                                evenement.getImage(),
-                                evenement.getDate_evenement(),
-                                evenement.getDescription(),
-                                evenement.getLieu(),
-                                evenement.getSiteweb(),
-                                evenement.getCreated_at(),
-                                evenement.getUpdated_at(),
-                                database);
+                            builder.enregistrerEvenementDepuisApi(evenement.getId(),
+                                    evenement.getEtat(),
+                                    evenement.getTypeevenement(),
+                                    evenement.getNom(),
+                                    evenement.getTelephone(),
+                                    evenement.getImage(),
+                                    evenement.getDate_evenement(),
+                                    evenement.getDescription(),
+                                    evenement.getLieu(),
+                                    evenement.getCreated_at(),
+                                    evenement.getUpdated_at(),
+                                    database);
+                            if (evenementsSelectionnes.size()>=0) {
+                                for (int j = 0; j < evenementsSelectionnes.size(); j++) {
+                                    if (builder.nomTypeEvenementFromId(evenement.getTypeevenement()).equals(evenementsSelectionnes.get(j))) {
+                                        FonctionsUtiles.createNotification(ctx, NOTIFICATION_ID, REQUEST_CODE, "De nouveaux evenements disponnibles pour vous");
+
+
+                                    }
+                                }
+                            }
+
+                        }catch (Exception e){
+
+                        }
                         try {
                             Glide.with(ctx).load(ApiLinks.API_IMAGES_EVENEMENTS_URL + objetfinal.getString(COLUMN_EVENEMENT_IMAGE)).downloadOnly(100, 100);
                         }catch (IllegalArgumentException e){

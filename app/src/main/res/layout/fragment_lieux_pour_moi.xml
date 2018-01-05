@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codeeatersteam.dinam.ui.LieuxPourMoi"
+    android:layout_marginTop="60dp"
     android:background="@color/Grey_500">
 
     <!-- TODO: Update blank fragment layout -->

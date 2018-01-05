@@ -1,6 +1,5 @@
 package com.codeeatersteam.dinam.ui;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -15,7 +14,6 @@ import android.widget.Button;
 
 import com.codeeatersteam.dinam.R;
 import com.codeeatersteam.dinam.adapters.EvenementsAdapter;
-import com.codeeatersteam.dinam.adapters.EvenementsPourMoiAdapter;
 import com.codeeatersteam.dinam.daos.EvenementsDao;
 import com.codeeatersteam.dinam.kernel.DbBuilder;
 import com.codeeatersteam.dinam.kernel.FonctionsUtiles;
@@ -31,13 +29,10 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_ID;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_IMAGE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_LIEU;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_NOM;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_SITE_WEB;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_TELEPHONE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_EVENEMENT_TYPE_EVENEMENT;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_TABLE_SYNCHRONIZED;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_TYPE_EVENEMENT_UPDATED_AT;
 import static com.codeeatersteam.dinam.kernel.Core.TABLE_EVENEMENTS;
-import static com.codeeatersteam.dinam.kernel.Core.TOUS_COMMUN_AUX_PREFERENCES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +55,7 @@ public class EvenementsPourMoi extends Fragment {
     private OnFragmentInteractionListener mListener;
     Button proposition;
     private RecyclerView recyclerView;
-    EvenementsPourMoiAdapter adapter;
+    EvenementsAdapter adapter;
     ArrayList<EvenementsDao> evenementsDaos;
 
     public EvenementsPourMoi() {
@@ -101,39 +96,50 @@ public class EvenementsPourMoi extends Fragment {
         final View rootView= inflater .inflate(R.layout.fragment_evenements_pour_moi, container, false);
         proposition = (Button) rootView.findViewById(R.id.proposerPersonalisationEvenementBtn);
 
-        if (PreferencesUtilisateur.getInstance(rootView.getContext()).getTypeEvenementPref().equals(TOUS_COMMUN_AUX_PREFERENCES)){
-            proposition.setVisibility(View.VISIBLE);
-            proposition.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
-                }
-            });
-        }else {
-            proposition.setVisibility(View.INVISIBLE);
-            recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_evenement_pour_moi);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-            evenementsDaos = new ArrayList<>();
-            adapter = new EvenementsPourMoiAdapter(evenementsDaos,rootView.getContext());
-            recyclerView.setAdapter(adapter);
-            mesEvenementsEnLocal();
-        }
+       try{
+           if (PreferencesUtilisateur.getInstance(rootView.getContext()).getPreferencesTypeEvenements().size()<=0){
+               proposition.setVisibility(View.VISIBLE);
+               proposition.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
+                   }
+               });
+           }else {
+               proposition.setVisibility(View.INVISIBLE);
+               recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_evenement_pour_moi);
+               recyclerView.setHasFixedSize(true);
+               recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+               evenementsDaos = new ArrayList<>();
+               adapter = new EvenementsAdapter(evenementsDaos,rootView.getContext());
+               recyclerView.setAdapter(adapter);
+               mesEvenementsEnLocal();
+           }
+
+       }catch (NullPointerException e){
+           proposition.setVisibility(View.VISIBLE);
+           proposition.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
+               }
+           });
+
+       }
+
+
 
         return rootView;
     }
 
     public void  mesEvenementsEnLocal() {
+        ArrayList<String> evenementsSelectionnes = PreferencesUtilisateur.getInstance(this.getContext()).getPreferencesTypeEvenements();
         int id, type, etat;
         String nom, telephone, image, description, dateevenement, lieu, siteweb, created_at, updated_at;
         evenementsDaos.clear();
         DbBuilder builder = new DbBuilder(this.getContext());
         SQLiteDatabase database = builder.getReadableDatabase();
-        String query = null;
-        if (!PreferencesUtilisateur.getInstance(getActivity()).getTypeEvenementPref().equals(TOUS_COMMUN_AUX_PREFERENCES)) {
-            query = "SELECT * FROM " + TABLE_EVENEMENTS + " WHERE " + COLUMN_EVENEMENT_TYPE_EVENEMENT + " = " + builder.idTypeEvenementFromNom(PreferencesUtilisateur.getInstance(getActivity()).getTypeEvenementPref()) + " AND " + COLUMN_EVENEMENT_ETAT + " = " + COLUMN_TABLE_SYNCHRONIZED + " ORDER BY " + COLUMN_EVENEMENT_ID + " DESC";
-
-        }
+        String query= "SELECT * FROM " + TABLE_EVENEMENTS;
         Cursor cursor = database.rawQuery(query, null);
         if (cursor.getCount() > 0) {
 
@@ -148,10 +154,16 @@ public class EvenementsPourMoi extends Fragment {
                 description = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_DESCRIPTION));
                 dateevenement = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_DATE));
                 lieu = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_LIEU));
-                siteweb = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_SITE_WEB));
                 created_at = cursor.getString(cursor.getColumnIndex(COLUMN_EVENEMENT_CREATED_AT));
                 updated_at = cursor.getString(cursor.getColumnIndex(COLUMN_TYPE_EVENEMENT_UPDATED_AT));
-                evenementsDaos.add(new EvenementsDao(id, etat, type, nom, telephone, image, dateevenement, description, lieu, siteweb, created_at, updated_at));
+
+                for (int i=0;i<evenementsSelectionnes.size();i++){
+                    if (builder.nomTypeEvenementFromId(type).equals(evenementsSelectionnes.get(i))){
+                        evenementsDaos.add(new EvenementsDao(id, etat, type, nom, telephone, image, dateevenement, description, lieu, created_at, updated_at));
+
+
+                    }
+                }
 
 
             }

@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.codeeatersteam.dinam.R;
-import com.codeeatersteam.dinam.adapters.OffresPourMoiAdapter;
+import com.codeeatersteam.dinam.adapters.OffresAdapter;
 import com.codeeatersteam.dinam.daos.OffresDao;
 import com.codeeatersteam.dinam.kernel.DbBuilder;
 import com.codeeatersteam.dinam.kernel.FonctionsUtiles;
@@ -27,15 +27,13 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_DESCRIPTION;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_DIPLOME_OFFRE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_DOMAINE_OFFRE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_EMAIL;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_ETAT;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_ID;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_POSTE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_SALAIRE;
+import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_SOURCE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_TELEPHONE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_OFFRE_TYPE_OFFRE;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_TABLE_SYNCHRONIZED;
 import static com.codeeatersteam.dinam.kernel.Core.TABLE_OFFRES;
-import static com.codeeatersteam.dinam.kernel.Core.TOUS_COMMUN_AUX_PREFERENCES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +56,7 @@ public class OffresPourMoi extends Fragment {
     private OnFragmentInteractionListener mListener;
     Button proposition;
     private RecyclerView recyclerView;
-    OffresPourMoiAdapter adapter;
+    OffresAdapter adapter;
     ArrayList<OffresDao> offresDaos;
 
     public OffresPourMoi() {
@@ -103,9 +101,35 @@ public class OffresPourMoi extends Fragment {
         // Inflate the layout for this fragment
         final View rootView= inflater .inflate(R.layout.fragment_offres_pour_moi, container, false);
         proposition = (Button) rootView.findViewById(R.id.proposerPersonalisationBtn);
+        System.out.println(PreferencesUtilisateur.getInstance(rootView.getContext()).getPreferencesTypeOffres().size());
 
-        if (PreferencesUtilisateur.getInstance(rootView.getContext()).getDomaineOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES) &&
-                PreferencesUtilisateur.getInstance(rootView.getContext()).getTypeOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES)){
+        try {
+
+
+            if (PreferencesUtilisateur.getInstance(rootView.getContext()).getPreferencesDomaines().size()<=0 &&
+                    PreferencesUtilisateur.getInstance(rootView.getContext()).getPreferencesTypeOffres().size()<=0){
+                System.out.println("if");
+                proposition.setVisibility(View.VISIBLE);
+                proposition.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
+                    }
+                });
+            }else {
+                System.out.println(PreferencesUtilisateur.getInstance(rootView.getContext()).getPreferencesTypeOffres().size());
+                proposition.setVisibility(View.INVISIBLE);
+                recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_offre_pour_moi);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+                offresDaos = new ArrayList<>();
+                adapter = new OffresAdapter(offresDaos,rootView.getContext());
+                recyclerView.setAdapter(adapter);
+                MesOffresEnLocal();
+            }
+
+        }catch (NullPointerException e){
+            System.out.println("catch");
             proposition.setVisibility(View.VISIBLE);
             proposition.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,48 +137,31 @@ public class OffresPourMoi extends Fragment {
                     FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
                 }
             });
-        }else {
-            proposition.setVisibility(View.INVISIBLE);
-            recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_offre_pour_moi);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-            offresDaos = new ArrayList<>();
-            adapter = new OffresPourMoiAdapter(offresDaos,rootView.getContext());
-            recyclerView.setAdapter(adapter);
-            MesOffresEnLocal();
+
         }
+
 
         return rootView;
     }
 
     public void  MesOffresEnLocal(){
+        ArrayList<String> domainesChoisis = PreferencesUtilisateur.getInstance(getActivity()).getPreferencesDomaines();
+        ArrayList<String> typesChoisis = PreferencesUtilisateur.getInstance(getActivity()).getPreferencesTypeOffres();
         int id,type,domaine,diplome;
-        String salaire,description,telephone,poste,date_audience,date_fin,email;
+        String salaire,description,telephone,poste,date_audience,date_fin,email,source;
         offresDaos.clear();
-        DbBuilder builder = new DbBuilder(this.getContext());
+       final DbBuilder builder = new DbBuilder(this.getContext());
+        System.out.println(builder.nomDomaineFromId(1));
+        System.out.println(builder.nomDomaineFromId(2));
+        System.out.println(builder.nomDomaineFromId(3));
         SQLiteDatabase database = builder.getReadableDatabase();
-        String query = null;
-        if (!PreferencesUtilisateur.getInstance(getActivity()).getDomaineOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES) &&
-                !PreferencesUtilisateur.getInstance(getActivity()).getTypeOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES)){
-             query = "SELECT * FROM "+TABLE_OFFRES+" WHERE "+COLUMN_OFFRE_DOMAINE_OFFRE+" = "+builder.idDomaineFromNom(PreferencesUtilisateur.getInstance(getActivity()).getDomaineOffrePref())+" " +
-                    "AND "+COLUMN_OFFRE_TYPE_OFFRE+" = "+builder.idTypeOffreFromNom(PreferencesUtilisateur.getInstance(getActivity()).getTypeOffrePref())+" AND "+COLUMN_OFFRE_ETAT+" = "+COLUMN_TABLE_SYNCHRONIZED+" ORDER BY "+COLUMN_OFFRE_ID+" DESC";
-        }
-        else if (!PreferencesUtilisateur.getInstance(getActivity()).getDomaineOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES) &&
-                PreferencesUtilisateur.getInstance(getActivity()).getTypeOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES)){
-            query = "SELECT * FROM "+TABLE_OFFRES+" WHERE "+COLUMN_OFFRE_DOMAINE_OFFRE+" = "+builder.idDomaineFromNom(PreferencesUtilisateur.getInstance(getActivity()).getDomaineOffrePref())+" " +
-                    "AND "+COLUMN_OFFRE_ETAT+" = "+COLUMN_TABLE_SYNCHRONIZED+" ORDER BY "+COLUMN_OFFRE_ID+" DESC";
-
-
-
-        }
-            else if (PreferencesUtilisateur.getInstance(getActivity()).getDomaineOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES) &&
-                !PreferencesUtilisateur.getInstance(getActivity()).getTypeOffrePref().equals(TOUS_COMMUN_AUX_PREFERENCES)){
-            query = "SELECT * FROM "+TABLE_OFFRES+" WHERE "+COLUMN_OFFRE_TYPE_OFFRE+" = "+builder.idTypeOffreFromNom(PreferencesUtilisateur.getInstance(getActivity()).getTypeOffrePref())+" AND "+COLUMN_OFFRE_ETAT+" = "+COLUMN_TABLE_SYNCHRONIZED+" ORDER BY "+COLUMN_OFFRE_ID+" DESC";
-
-        }
+        String query = "SELECT * FROM "+TABLE_OFFRES;
        Cursor cursor =database.rawQuery(query,null);
 
+
         while (cursor.moveToNext()){
+
+
             id = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFRE_ID));
 
             type = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFRE_TYPE_OFFRE));
@@ -167,7 +174,53 @@ public class OffresPourMoi extends Fragment {
             date_audience = cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_DATE_AUDIENCE));
             date_fin = cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_DATE_CLOTURE));
             email  = cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_EMAIL));
-            offresDaos.add(new OffresDao(id,domaine,type,diplome,salaire,description,telephone,poste,date_audience,date_fin,email));
+            source  = cursor.getString(cursor.getColumnIndex(COLUMN_OFFRE_SOURCE));
+           // System.out.println(domaine);
+
+            if (domainesChoisis.size()>0){
+
+
+
+                if (typesChoisis.size()>0){
+                    for (int i =0;i<domainesChoisis.size();i++){
+
+                        if (builder.nomDomaineFromId(domaine).equals(domainesChoisis.get(i))){
+                            for (int j =0;j<typesChoisis.size();j++){
+                                if (builder.nomTypeOffreFromId(type).equals(typesChoisis.get(j))){
+                                    offresDaos.add(new OffresDao(id,domaine,type,diplome,salaire,description,telephone,poste,date_audience,date_fin,email,source));
+
+                                }
+
+                            }
+
+                        }
+                    }
+
+                }else {
+                    for (int i =0;i<domainesChoisis.size();i++){
+
+                        if (builder.nomDomaineFromId(domaine).equals(domainesChoisis.get(i))){
+                            offresDaos.add(new OffresDao(id,domaine,type,diplome,salaire,description,telephone,poste,date_audience,date_fin,email,source));
+                        }
+                    }
+
+                }
+
+            }else {
+
+                for (int j =0;j<typesChoisis.size();j++){
+                    if (builder.nomTypeOffreFromId(type).equals(typesChoisis.get(j))){
+                        offresDaos.add(new OffresDao(id,domaine,type,diplome,salaire,description,telephone,poste,date_audience,date_fin,email,source));
+
+                    }
+
+                }
+
+
+            }
+
+
+
 
 
         }

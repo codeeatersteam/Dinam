@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/cardview_default_elevation">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:id="@+id/imageCVuser"
+                    android:layout_width="60dp"
+                    android:layout_height="70dp"
+                    android:src="@drawable/avatar"/>
+                <TextView
+                    android:id="@+id/nomCVTxt"
+                    android:layout_width="175dp"
+                    android:layout_height="wrap_content"
+                    android:text="The Dinam CV Name"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="70dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Domaine d'acitivite de la personne"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginTop="40dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONSULTER"
+                android:layout_gravity="right"
+                android:id="@+id/btnConsulterCV"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/White"
+                android:minWidth="100dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"/>
+
+
+
+        </FrameLayout>
+
+
+</android.support.v7.widget.CardView>

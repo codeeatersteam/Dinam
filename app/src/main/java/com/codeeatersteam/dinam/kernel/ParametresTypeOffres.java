@@ -23,26 +23,36 @@ public class ParametresTypeOffres extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         DbBuilder databaseBuilder = new DbBuilder(getActivity());
         final ArrayList<String> typeOffres = databaseBuilder.listeDesTypesOffres();
-        typeOffres.add(0,TOUS_COMMUN_AUX_PREFERENCES);
         CharSequence[] types = new CharSequence[typeOffres.size()];
         types = typeOffres.toArray(types);
+        ArrayList<String> preferesdepuis =PreferencesUtilisateur.getInstance(getActivity()).getPreferencesTypeOffres();
+//        boolean [] ras =new boolean[preferesdepuis.size()];
+//        for (int i=0;i<preferesdepuis.size();i++){
+//            ras.equals(i);
+//        }
+
         final CharSequence[] listeTypesOffres = types;
+        final ArrayList<String> selectionnes = new ArrayList<String>();
 
-        builder.setTitle("Choisissez votre domaine de preference").setSingleChoiceItems(listeTypesOffres, 0, new DialogInterface.OnClickListener() {
+
+                builder.setTitle("Choisissez votre domaine de preference").setMultiChoiceItems(listeTypesOffres, null,  new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if (isChecked){
+                            selectionnes.add(String.valueOf(listeTypesOffres[which]));
+                        }else if (selectionnes.contains(listeTypesOffres[which])){
+                            selectionnes.remove(listeTypesOffres[which]);
+                        }
+
+                    }
+                }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                typeOffre = (String) listeTypesOffres[which];
-
-            }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (typeOffre==null){
-
-                }else {
-
-                    PreferencesUtilisateur.getInstance(getActivity()).setTypeOffrePref(typeOffre);
-                    FonctionsUtiles.ouvrirActivite(getActivity(), Personnalisation.class);
+                if (selectionnes.size()>0){
+                    PreferencesUtilisateur.getInstance(getActivity()).setPreferencesTypeOffres(selectionnes);
+                }
+                else {
+                    PreferencesUtilisateur.getInstance(getActivity()).getPreferencesTypeOffres().clear();
                 }
 
 

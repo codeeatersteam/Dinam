@@ -26,27 +26,31 @@ public class ParametresTypeEvenements extends DialogFragment{
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         DbBuilder databaseBuilder = new DbBuilder(getActivity());
         final ArrayList<String> evenementlist = databaseBuilder.listeDesTypesEvenements();
-        evenementlist.add(0,TOUS_COMMUN_AUX_PREFERENCES);
 
         CharSequence[] typeevenements = new CharSequence[evenementlist.size()];
         typeevenements = evenementlist.toArray(typeevenements);
         final CharSequence[] listetypeevenements = typeevenements;
+            final ArrayList<String> selectionnes = new ArrayList<String>();
 
-        builder.setTitle("Choisissez votre domaine de preference").setSingleChoiceItems(listetypeevenements, 0, new DialogInterface.OnClickListener() {
+        builder.setTitle("Choisissez votre evenement de preference").setMultiChoiceItems(listetypeevenements, null,  new DialogInterface.OnMultiChoiceClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                typeevenementchoisi = (String) listetypeevenements[which];
-
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked){
+                    selectionnes.add(String.valueOf(listetypeevenements[which]));
+                }else if (selectionnes.contains(listetypeevenements[which])){
+                    selectionnes.remove(listetypeevenements[which]);
+                }
 
             }
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (typeevenementchoisi==null){
+                if (selectionnes.size()>0){
+                    PreferencesUtilisateur.getInstance(getActivity()).setPreferencesTypeEvenements(selectionnes);
 
                 }else {
-                    PreferencesUtilisateur.getInstance(getActivity()).setTypeEvenementPref(typeevenementchoisi);
-                    FonctionsUtiles.ouvrirActivite(getActivity(), Personnalisation.class);
+                    PreferencesUtilisateur.getInstance(getActivity()).getPreferencesTypeEvenements().clear();
+
 
                 }
 

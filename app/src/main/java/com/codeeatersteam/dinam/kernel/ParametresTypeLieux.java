@@ -26,30 +26,31 @@ public class ParametresTypeLieux extends DialogFragment{
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         DbBuilder databaseBuilder = new DbBuilder(getActivity());
         final ArrayList<String> lieulist = databaseBuilder.listeDesTypesLieux();
-        lieulist.add(0,TOUS_COMMUN_AUX_PREFERENCES);
 
         CharSequence[] typelieux = new CharSequence[lieulist.size()];
         typelieux = lieulist.toArray(typelieux);
         final CharSequence[] listetypelieux = typelieux;
+            final ArrayList<String> selectionnes = new ArrayList<String>();
 
-        builder.setTitle("Choisissez votre domaine de preference").setSingleChoiceItems(listetypelieux, 0, new DialogInterface.OnClickListener() {
+        builder.setTitle("Choisissez votre lieu de preference").setMultiChoiceItems(listetypelieux, null,  new DialogInterface.OnMultiChoiceClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                typelieuxchoisi = (String) listetypelieux[which];
-
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked){
+                    selectionnes.add(String.valueOf(listetypelieux[which]));
+                }else if (selectionnes.contains(listetypelieux[which])){
+                    selectionnes.remove(listetypelieux[which]);
+                }
 
             }
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (typelieuxchoisi==null){
-
-                }else {
-                    PreferencesUtilisateur.getInstance(getActivity()).setTypeLieuxPref(typelieuxchoisi);
-                    FonctionsUtiles.ouvrirActivite(getActivity(), Personnalisation.class);
-
+                if (selectionnes.size()>0){
+                    PreferencesUtilisateur.getInstance(getActivity()).setPreferencesTypeLieux(selectionnes);
                 }
-
+                else {
+                    PreferencesUtilisateur.getInstance(getActivity()).getPreferencesTypeLieux().clear();
+                }
             }
         }).setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
             @Override

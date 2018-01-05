@@ -29,7 +29,7 @@ public class ProposerOffre extends AppCompatActivity {
     Button debutDateAudience;
     Button finDateAudience;
     Button enregistrerOffre;
-    EditText telephone,email,description,salaireAPourvoir,posteAPourvoir;
+    EditText telephone,email,description,salaireAPourvoir,posteAPourvoir,source;
     Spinner domaine,type,diplome;
     int year_x,month_x,day_x;
     static final int DIALOG_ID_DEBUT = 1;
@@ -53,6 +53,7 @@ public class ProposerOffre extends AppCompatActivity {
         description = (EditText)findViewById(R.id.descriptionNewOffre);
         telephone = (EditText)findViewById(R.id.telephoneNewOffre);
         email = (EditText)findViewById(R.id.emailNewOffre);
+        source = (EditText)findViewById(R.id.sourceNewOffre);
         domaine = (Spinner) findViewById(R.id.domaine_offre_spinner);
         type = (Spinner)findViewById(R.id.type_offre_spinner) ;
         diplome=(Spinner)findViewById(R.id.diplome_offre_spinner) ;
@@ -99,7 +100,7 @@ public class ProposerOffre extends AppCompatActivity {
             public void onClick(View v) {
                 if (verifierDonnees() && verifierDates()) {
 
-                    if (Daybetween(datefin, datedebut, "yyyy-mm-dd") >= 0) {
+                    if (Daybetween(datedebut, datefin, "yyyy-mm-dd") <= 0) {
 
                         SweetAlertDialog dialog;
                         dialog = new SweetAlertDialog(v.getContext(),SweetAlertDialog.ERROR_TYPE);
@@ -112,9 +113,9 @@ public class ProposerOffre extends AppCompatActivity {
 
                         DbBuilder builder = new DbBuilder(v.getContext());
                         SQLiteDatabase database = builder.getWritableDatabase();
-                        builder.enregistrerOffreEnLocal(builder.idDernierOffre() + 1, posteAPourvoir.getText().toString(),
+                        builder.enregistrerOffreEnLocal(builder.idDernierOffre() + 10000, posteAPourvoir.getText().toString(),
                                 salaireAPourvoir.getText().toString(), datedebut, datefin, description.getText().toString(),
-                                email.getText().toString(), telephone.getText().toString(),
+                                email.getText().toString(),source.getText().toString(), telephone.getText().toString(),
                                 dbBuilder.idTypeOffreFromNom(type.getSelectedItem().toString()),
                                 dbBuilder.idDomaineFromNom(domaine.getSelectedItem().toString()),
                                 dbBuilder.idDiplomeFromNom(diplome.getSelectedItem().toString()), database);
@@ -127,7 +128,7 @@ public class ProposerOffre extends AppCompatActivity {
                         sDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                ouvrirActivite(sweetAlertDialog.getContext(), Conteneur.class);
+                                ouvrirActivite(sweetAlertDialog.getContext(), ConteneurPrincipal.class);
                             }
                         });
                         sDialog.show();
@@ -196,7 +197,7 @@ public class ProposerOffre extends AppCompatActivity {
 
     private boolean  verifierDonnees(){
         if ( !controlchampsvide(posteAPourvoir)  && !controlchampsvide(salaireAPourvoir) && !controlchampsvide(description)
-                 && !controlchampsvide(telephone) && !verifierEmail(email)){
+                 && !controlchampsvide(telephone) && !verifierEmail(email) && !controlchampsvide(source)){
             return true;
         }
         return false;
@@ -214,6 +215,7 @@ public class ProposerOffre extends AppCompatActivity {
             dialog.setTitleText("Veuillez renseigner les dates s'il vous plait");
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
+
             return false;
 
         }

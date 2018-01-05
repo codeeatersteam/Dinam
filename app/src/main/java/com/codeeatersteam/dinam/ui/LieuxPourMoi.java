@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.codeeatersteam.dinam.R;
-import com.codeeatersteam.dinam.adapters.LieuxPourMoiAdapter;
+import com.codeeatersteam.dinam.adapters.LieuxAdapter;
 import com.codeeatersteam.dinam.daos.LieuxDao;
 import com.codeeatersteam.dinam.kernel.DbBuilder;
 import com.codeeatersteam.dinam.kernel.FonctionsUtiles;
@@ -32,10 +32,8 @@ import static com.codeeatersteam.dinam.kernel.Core.COLUMN_LIEU_SITE_WEB;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_LIEU_TELEPHONE;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_LIEU_TYPE_LIEU;
 import static com.codeeatersteam.dinam.kernel.Core.COLUMN_LIEU_UPDATED_AT;
-import static com.codeeatersteam.dinam.kernel.Core.COLUMN_TABLE_SYNCHRONIZED;
 import static com.codeeatersteam.dinam.kernel.Core.LISTES_LIEUX_EN_LOCAL_APPROUVES;
 import static com.codeeatersteam.dinam.kernel.Core.TABLE_LIEUX;
-import static com.codeeatersteam.dinam.kernel.Core.TOUS_COMMUN_AUX_PREFERENCES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +56,7 @@ public class LieuxPourMoi extends Fragment {
     private OnFragmentInteractionListener mListener;
     Button proposition;
     private RecyclerView recyclerView;
-    LieuxPourMoiAdapter adapter;
+    LieuxAdapter adapter;
     ArrayList<LieuxDao> lieuxDaos;
 
     public LieuxPourMoi() {
@@ -98,8 +96,27 @@ public class LieuxPourMoi extends Fragment {
         // Inflate the layout for this fragment
         final View rootView= inflater .inflate(R.layout.fragment_lieux_pour_moi, container, false);
         proposition = (Button) rootView.findViewById(R.id.proposerPersonalisationLieuBtn);
+        try{
+            if (PreferencesUtilisateur.getInstance(rootView.getContext()).getPreferencesTypeLieux().size()<=0){
+                proposition.setVisibility(View.VISIBLE);
+                proposition.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
+                    }
+                });
+            }else {
+                proposition.setVisibility(View.INVISIBLE);
+                recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_lieux_pour_moi);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+                lieuxDaos = new ArrayList<>();
+                adapter = new LieuxAdapter(rootView.getContext(),lieuxDaos);
+                recyclerView.setAdapter(adapter);
+                lieuxPourMoiEnLocal();
+            }
 
-        if (PreferencesUtilisateur.getInstance(rootView.getContext()).getTypeLieuxPref().equals(TOUS_COMMUN_AUX_PREFERENCES)){
+        }catch (NullPointerException ex){
             proposition.setVisibility(View.VISIBLE);
             proposition.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,32 +124,24 @@ public class LieuxPourMoi extends Fragment {
                     FonctionsUtiles.ouvrirActivite(rootView.getContext(),Personnalisation.class);
                 }
             });
-        }else {
-            proposition.setVisibility(View.INVISIBLE);
-            recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_lieux_pour_moi);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-            lieuxDaos = new ArrayList<>();
-            adapter = new LieuxPourMoiAdapter(lieuxDaos,rootView.getContext());
-            recyclerView.setAdapter(adapter);
-            lieuxPourMoiEnLocal();
+
         }
+
+
 
         return rootView;
 
     }
 
     public void lieuxPourMoiEnLocal(){
+        ArrayList<String>lieuxSelectionnes = PreferencesUtilisateur.getInstance(this.getContext()).getPreferencesTypeLieux();
         int id,etat,typelieu;
         String nom,telephone,adresse,description,siteweb,image,created_at,updated_at;
         lieuxDaos.clear();
         DbBuilder builder = new DbBuilder(this.getContext());
         SQLiteDatabase database = builder.getReadableDatabase();
-        String query = null;
-        if (!PreferencesUtilisateur.getInstance(getActivity()).getTypeEvenementPref().equals(TOUS_COMMUN_AUX_PREFERENCES)) {
-            query = "SELECT * FROM " + TABLE_LIEUX + " WHERE " + COLUMN_LIEU_TYPE_LIEU+ " = " + builder.idTypeLieuFromNom(PreferencesUtilisateur.getInstance(getActivity()).getTypeLieuxPref()) + " AND " + COLUMN_LIEU_ETAT + " = " + COLUMN_TABLE_SYNCHRONIZED + " ORDER BY " + COLUMN_LIEU_ID + " DESC";
+        String query =  "SELECT * FROM " + TABLE_LIEUX ;
 
-        }
         Cursor cursor = database.rawQuery(LISTES_LIEUX_EN_LOCAL_APPROUVES,null);
 
         while (cursor.moveToNext()){
@@ -148,8 +157,13 @@ public class LieuxPourMoi extends Fragment {
             siteweb = cursor.getString(cursor.getColumnIndex(COLUMN_LIEU_SITE_WEB));
             created_at  = cursor.getString(cursor.getColumnIndex(COLUMN_LIEU_CREATED_AT));
             updated_at  = cursor.getString(cursor.getColumnIndex(COLUMN_LIEU_UPDATED_AT));
-            lieuxDaos.add(new LieuxDao( id,  etat,  typelieu,  nom,  telephone,  adresse,
-                    description,  siteweb,  image,  created_at,  updated_at));
+            for (int i=0;i<lieuxSelectionnes.size();i++){
+                if (builder.nomTypeLieuFromId(typelieu).equals(lieuxSelectionnes.get(i))){
+                    lieuxDaos.add(new LieuxDao( id,  etat,  typelieu,  nom,  telephone,  adresse,
+                            description,  siteweb,  image,  created_at,  updated_at));
+                }
+            }
+
 
 
         }
